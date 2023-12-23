@@ -928,7 +928,18 @@ static void check_conflict (LexState *ls, struct LHS_assign *lh, expdesc *v) {
 }
 
 
-static void assignment (LexState *ls, struct LHS_assign *lh, int nvars) {
+static void compound_assignment(LexState *ls, struct LHS_assign *lh, BinOpr op, expdesc *e) {
+  if (op != OPR_NOBINOPR) {
+    expdesc result = lh->v;
+    luaK_infix(ls->fs, op, &result);
+    luaK_posfix(ls->fs, op, &result, e);
+    luaK_storevar(ls->fs, &lh->v, &result);
+  }
+  else luaK_storevar(ls->fs, &lh->v, e);
+}
+
+
+static void assignment (LexState *ls, struct LHS_assign *lh, int nvars, BinOpr *op) {
   expdesc e;
   check_condition(ls, VLOCAL <= lh->v.k && lh->v.k <= VINDEXED,
                       "syntax error");
@@ -940,10 +951,13 @@ static void assignment (LexState *ls, struct LHS_assign *lh, int nvars) {
       check_conflict(ls, lh, &nv.v);
     luaY_checklimit(ls->fs, nvars, LUAI_MAXCCALLS - ls->L->nCcalls,
                     "variables in assignment");
-    assignment(ls, &nv, nvars+1);
+    assignment(ls, &nv, nvars+1, op);
   }
-  else {  /* assignment -> `=' explist1 */
+  else {  /* assignment -> [ binop ] `=' explist1 */
     int nexps;
+    *op = getbinopr(ls->t.token);
+    if (*op != OPR_NOBINOPR)
+      luaX_next(ls);
     checknext(ls, '=');
     nexps = explist1(ls, &e);
     if (nexps != nvars) {
@@ -953,12 +967,13 @@ static void assignment (LexState *ls, struct LHS_assign *lh, int nvars) {
     }
     else {
       luaK_setoneret(ls->fs, &e);  /* close last expression */
-      luaK_storevar(ls->fs, &lh->v, &e);
+      compound_assignment(ls, lh, *op, &e);
       return;  /* avoid default */
     }
   }
+
   init_exp(&e, VNONRELOC, ls->fs->freereg-1);  /* default assignment */
-  luaK_storevar(ls->fs, &lh->v, &e);
+  compound_assignment(ls, lh, *op, &e);
 }
 
 
@@ -1230,7 +1245,8 @@ static void exprstat (LexState *ls) {
     SETARG_C(getcode(fs, &v.v), 1);  /* call statement uses no results */
   else {  /* stat -> assignment */
     v.prev = NULL;
-    assignment(ls, &v, 1);
+    BinOpr op;
+    assignment(ls, &v, 1, &op);
   }
 }
 
