@@ -77,135 +77,6 @@ lyte.set_filtermode =  lyte_core.set_filtermode
 lyte.reset_filtermode =  lyte_core.reset_filtermode
 lyte.reset_shader =  lyte_core.reset_shader
 
--- records
-lyte.ShaderDef = {
-    id=nil;
-    __new=function(self, id) rawset(self, 'id', id) end;
-    __index=function(self, k)
-        return rawget(self, k)
-    end;
-    __newindex=function(self, k, v)
-    end;
-    __tostring=function(self) return '(obj type = lyte.ShaderDef)' end;
-}
-lyte.Image = {
-    id=nil;
-    __new=function(self, id) rawset(self, 'id', id) end;
-    __index=function(self, k)
-        if k=='width' then return lyte.get_image_width(self, k) end
-        if k=='height' then return lyte.get_image_height(self, k) end
-        if k=='is_canvas' then return lyte.is_image_canvas(self, k) end
-        return rawget(self, k)
-    end;
-    __newindex=function(self, k, v)
-    end;
-    __gc=lyte.cleanup_image;
-    __tostring=function(self) return '(obj type = lyte.Image)' end;
-}
-lyte.ImageBatch = {
-    id=nil;
-    __new=function(self, id) rawset(self, 'id', id) end;
-    __index=function(self, k)
-        if k=='rect_count' then return lyte.get_imagebatch_rect_count(self, k) end
-        if k=='add_rect' then return lyte.add_imagebatch_rect end
-        if k=='draw' then return lyte.draw_imagebatch end
-        if k=='reset' then return lyte.reset_imagebatch end
-        return rawget(self, k)
-    end;
-    __newindex=function(self, k, v)
-    end;
-    __gc=lyte.cleanup_imagebatch;
-    __tostring=function(self) return '(obj type = lyte.ImageBatch)' end;
-}
-lyte.Font = {
-    id=nil;
-    __new=function(self, id) rawset(self, 'id', id) end;
-    __index=function(self, k)
-        return rawget(self, k)
-    end;
-    __newindex=function(self, k, v)
-    end;
-    __gc=lyte.cleanup_font;
-    __tostring=function(self) return '(obj type = lyte.Font)' end;
-}
-lyte.Music = {
-    id=nil;
-    __new=function(self, id) rawset(self, 'id', id) end;
-    __index=function(self, k)
-        if k=='playing' then return lyte.is_music_playing(self, k) end
-        if k=='length' then return lyte.get_music_length(self, k) end
-        if k=='length_played' then return lyte.get_music_length_played(self, k) end
-        if k=='pan' then return lyte.get_music_pan(self, k) end
-        if k=='pitch' then return lyte.get_music_pitch(self, k) end
-        if k=='volume' then return lyte.get_music_volume(self, k) end
-        if k=='play' then return lyte.play_music end
-        if k=='pause' then return lyte.pause_music end
-        if k=='resume' then return lyte.resume_music end
-        if k=='stop' then return lyte.stop_music end
-        if k=='seek' then return lyte.seek_music end
-        return rawget(self, k)
-    end;
-    __newindex=function(self, k, v)
-        if k=='pan' then lyte.set_music_pan(self, v)
-        elseif k=='pitch' then lyte.set_music_pitch(self, v)
-        elseif k=='volume' then lyte.set_music_volume(self, v)
-        end
-    end;
-    __gc=lyte.cleanup_music;
-    __tostring=function(self) return '(obj type = lyte.Music)' end;
-}
-lyte.Sound = {
-    id=nil;
-    __new=function(self, id) rawset(self, 'id', id) end;
-    __index=function(self, k)
-        if k=='pan' then return lyte.get_sound_pan(self, k) end
-        if k=='pitch' then return lyte.get_sound_pitch(self, k) end
-        if k=='volume' then return lyte.get_sound_volume(self, k) end
-        if k=='clone' then return lyte.clone_sound end
-        if k=='pause' then return lyte.pause_sound end
-        if k=='play' then return lyte.play_sound end
-        if k=='resume' then return lyte.resume_sound end
-        if k=='stop' then return lyte.stop_sound end
-        return rawget(self, k)
-    end;
-    __newindex=function(self, k, v)
-        if k=='pan' then lyte.set_sound_pan(self, v)
-        elseif k=='pitch' then lyte.set_sound_pitch(self, v)
-        elseif k=='volume' then lyte.set_sound_volume(self, v)
-        end
-    end;
-    __gc=lyte.cleanup_sound;
-    __tostring=function(self) return '(obj type = lyte.Sound)' end;
-}
-lyte.Shader = {
-    id=nil;
-    __new=function(self, id) rawset(self, 'id', id) end;
-    __index=function(self, k)
-        if k=='set' then return lyte.set_shader_uniform end
-        if k=='reset' then return lyte.reset_shader_uniform end
-        return rawget(self, k)
-    end;
-    __newindex=function(self, k, v)
-    end;
-    __gc=lyte.cleanup_shader;
-    __tostring=function(self) return '(obj type = lyte.Shader)' end;
-}
-lyte.ShaderBuilder = {
-    id=nil;
-    __new=function(self, id) rawset(self, 'id', id) end;
-    __index=function(self, k)
-        if k=='uniform' then return lyte.shaderbuilder_uniform end
-        if k=='vertex' then return lyte.shaderbuilder_vertex end
-        if k=='fragment' then return lyte.shaderbuilder_fragment end
-        if k=='build' then return lyte.shaderbuilder_build end
-        return rawget(self, k)
-    end;
-    __newindex=function(self, k, v)
-    end;
-    __gc=lyte.cleanup_shaderbuilder;
-    __tostring=function(self) return '(obj type = lyte.ShaderBuilder)' end;
-}
-
 -- lua 'wrapping' functions
 lyte.cleanup_image = function(image_wrapped)
     local image = image_wrapped.id
@@ -475,6 +346,135 @@ lyte.reset_shader_uniform = function(shader_wrapped, uniform_name)
     local shader = shader_wrapped.id
     lyte_core.shader_reset_uniform(shader, uniform_name)
 end
+
+-- records
+lyte.ShaderDef = {
+    id=nil;
+    __new=function(self, id) rawset(self, 'id', id) end;
+    __index=function(self, k)
+        return rawget(self, k)
+    end;
+    __newindex=function(self, k, v)
+    end;
+    __tostring=function(self) return '(obj type = lyte.ShaderDef)' end;
+}
+lyte.Image = {
+    id=nil;
+    __new=function(self, id) rawset(self, 'id', id) end;
+    __index=function(self, k)
+        if k=='width' then return lyte.get_image_width(self, k) end
+        if k=='height' then return lyte.get_image_height(self, k) end
+        if k=='is_canvas' then return lyte.is_image_canvas(self, k) end
+        return rawget(self, k)
+    end;
+    __newindex=function(self, k, v)
+    end;
+    __gc=lyte.cleanup_image;
+    __tostring=function(self) return '(obj type = lyte.Image)' end;
+}
+lyte.ImageBatch = {
+    id=nil;
+    __new=function(self, id) rawset(self, 'id', id) end;
+    __index=function(self, k)
+        if k=='rect_count' then return lyte.get_imagebatch_rect_count(self, k) end
+        if k=='add_rect' then return lyte.add_imagebatch_rect end
+        if k=='draw' then return lyte.draw_imagebatch end
+        if k=='reset' then return lyte.reset_imagebatch end
+        return rawget(self, k)
+    end;
+    __newindex=function(self, k, v)
+    end;
+    __gc=lyte.cleanup_imagebatch;
+    __tostring=function(self) return '(obj type = lyte.ImageBatch)' end;
+}
+lyte.Font = {
+    id=nil;
+    __new=function(self, id) rawset(self, 'id', id) end;
+    __index=function(self, k)
+        return rawget(self, k)
+    end;
+    __newindex=function(self, k, v)
+    end;
+    __gc=lyte.cleanup_font;
+    __tostring=function(self) return '(obj type = lyte.Font)' end;
+}
+lyte.Music = {
+    id=nil;
+    __new=function(self, id) rawset(self, 'id', id) end;
+    __index=function(self, k)
+        if k=='playing' then return lyte.is_music_playing(self, k) end
+        if k=='length' then return lyte.get_music_length(self, k) end
+        if k=='length_played' then return lyte.get_music_length_played(self, k) end
+        if k=='pan' then return lyte.get_music_pan(self, k) end
+        if k=='pitch' then return lyte.get_music_pitch(self, k) end
+        if k=='volume' then return lyte.get_music_volume(self, k) end
+        if k=='play' then return lyte.play_music end
+        if k=='pause' then return lyte.pause_music end
+        if k=='resume' then return lyte.resume_music end
+        if k=='stop' then return lyte.stop_music end
+        if k=='seek' then return lyte.seek_music end
+        return rawget(self, k)
+    end;
+    __newindex=function(self, k, v)
+        if k=='pan' then lyte.set_music_pan(self, v)
+        elseif k=='pitch' then lyte.set_music_pitch(self, v)
+        elseif k=='volume' then lyte.set_music_volume(self, v)
+        end
+    end;
+    __gc=lyte.cleanup_music;
+    __tostring=function(self) return '(obj type = lyte.Music)' end;
+}
+lyte.Sound = {
+    id=nil;
+    __new=function(self, id) rawset(self, 'id', id) end;
+    __index=function(self, k)
+        if k=='pan' then return lyte.get_sound_pan(self, k) end
+        if k=='pitch' then return lyte.get_sound_pitch(self, k) end
+        if k=='volume' then return lyte.get_sound_volume(self, k) end
+        if k=='clone' then return lyte.clone_sound end
+        if k=='pause' then return lyte.pause_sound end
+        if k=='play' then return lyte.play_sound end
+        if k=='resume' then return lyte.resume_sound end
+        if k=='stop' then return lyte.stop_sound end
+        return rawget(self, k)
+    end;
+    __newindex=function(self, k, v)
+        if k=='pan' then lyte.set_sound_pan(self, v)
+        elseif k=='pitch' then lyte.set_sound_pitch(self, v)
+        elseif k=='volume' then lyte.set_sound_volume(self, v)
+        end
+    end;
+    __gc=lyte.cleanup_sound;
+    __tostring=function(self) return '(obj type = lyte.Sound)' end;
+}
+lyte.Shader = {
+    id=nil;
+    __new=function(self, id) rawset(self, 'id', id) end;
+    __index=function(self, k)
+        if k=='set' then return lyte.set_shader_uniform end
+        if k=='reset' then return lyte.reset_shader_uniform end
+        return rawget(self, k)
+    end;
+    __newindex=function(self, k, v)
+    end;
+    __gc=lyte.cleanup_shader;
+    __tostring=function(self) return '(obj type = lyte.Shader)' end;
+}
+lyte.ShaderBuilder = {
+    id=nil;
+    __new=function(self, id) rawset(self, 'id', id) end;
+    __index=function(self, k)
+        if k=='uniform' then return lyte.shaderbuilder_uniform end
+        if k=='vertex' then return lyte.shaderbuilder_vertex end
+        if k=='fragment' then return lyte.shaderbuilder_fragment end
+        if k=='build' then return lyte.shaderbuilder_build end
+        return rawget(self, k)
+    end;
+    __newindex=function(self, k, v)
+    end;
+    __gc=lyte.cleanup_shaderbuilder;
+    __tostring=function(self) return '(obj type = lyte.ShaderBuilder)' end;
+}
 
 -- manually handled functions in current namespace
 lyte.reset_font = function()

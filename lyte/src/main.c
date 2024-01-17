@@ -554,6 +554,14 @@ static int cleanup(void) {
 }
 
 
+#ifdef __EMSCRIPTEN__
+EMSCRIPTEN_KEEPALIVE void lyte_do_string(const char* string) {
+    luaL_dostring(_global_L, string);
+    lua_gc(_global_L, LUA_GCCOLLECT, 0);
+}
+#endif
+
+
 int main(int argc, char *argv[]) {
     int err  = 0;
 
