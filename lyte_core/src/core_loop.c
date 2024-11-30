@@ -54,7 +54,11 @@ static inline void _tick_function(void) {
     yscale = 1.0;
 #else
     glfwGetFramebufferSize(lytecore_state.window, &win_w, &win_h);
-    glfwGetWindowContentScale(lytecore_state.window , &xscale, &yscale);
+
+    xscale = 1.0;
+    yscale = 1.0;
+
+    // glfwGetWindowContentScale(lytecore_state.window , &xscale, &yscale);
 #endif
 
 

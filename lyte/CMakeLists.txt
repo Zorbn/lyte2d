@@ -85,7 +85,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../deps/isocline ${CMAKE_CURRENT_BI
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
     lyte_core
-    lua51-static
+    lua51
     isocline
 )
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
